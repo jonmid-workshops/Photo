@@ -10,12 +10,16 @@ import android.widget.ImageView;
 
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class MainActivity extends AppCompatActivity {
 
-    TextInputEditText txtCode;
-    Button btnShow;
-    ImageView imgPhoto;
+    private ExecutorService queue = Executors.newSingleThreadExecutor();
+
+    private TextInputEditText txtCode;
+    private Button btnShow;
+    private ImageView imgPhoto;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,6 +29,8 @@ public class MainActivity extends AppCompatActivity {
         txtCode = findViewById(R.id.txvCode);
         btnShow = findViewById(R.id.btnLoad);
         imgPhoto = findViewById(R.id.imgLoad);
+
+        txtCode.setText("27017220144");
 
 
         btnShow.setOnClickListener(new View.OnClickListener() {
@@ -39,6 +45,8 @@ public class MainActivity extends AppCompatActivity {
     public void showPhoto(){
         String code = txtCode.getText().toString().trim();
         String strUrl = "http://acad.ucaldas.edu.co/fotos/";
+        String strUrlFormat = "http://acad.ucaldas.edu.co/fotos/1701520879.jpg";
+
         URL url = null;
         Runnable thread = null;
 
@@ -74,6 +82,7 @@ public class MainActivity extends AppCompatActivity {
                     }
                 };
 
+                queue.execute(thread);
             }
         }
     }

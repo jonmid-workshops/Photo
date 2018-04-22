@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -21,16 +22,29 @@ public class MainActivity extends AppCompatActivity {
     private Button btnShow;
     private ImageView imgPhoto;
 
+    private  String localPath = "";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        localPath = getApplicationContext().getFilesDir().getAbsolutePath();
 
         txtCode = findViewById(R.id.txvCode);
         btnShow = findViewById(R.id.btnLoad);
         imgPhoto = findViewById(R.id.imgLoad);
 
         txtCode.setText("27017220144");
+
+
+        CAFData data = CAFData.dataWithContentsOfFile(localPath + "/lastPhoto.jpg");
+        if (data != null){
+            Bitmap bitmap = data.toImage();
+            if (bitmap != null){
+                imgPhoto.setImageBitmap(bitmap);
+            }
+        }
 
 
         btnShow.setOnClickListener(new View.OnClickListener() {
@@ -77,6 +91,8 @@ public class MainActivity extends AppCompatActivity {
                                         imgPhoto.setImageBitmap(bitmapTmp);
                                     }
                                 });
+
+                                data.writeToFile(localPath + "/lastPhoto.jpg", true);
                             }
                         }
                     }

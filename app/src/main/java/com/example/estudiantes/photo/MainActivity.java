@@ -1,5 +1,6 @@
 package com.example.estudiantes.photo;
 
+import android.graphics.Bitmap;
 import android.support.design.widget.TextInputEditText;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -52,10 +53,24 @@ public class MainActivity extends AppCompatActivity {
 
             if (url != null){
 
+                final URL urlTemp = url;
                 thread = new Runnable() {
                     @Override
                     public void run() {
-                        //
+                        CAFData data = CAFData.dataWithContentsOfURL(urlTemp);
+                        Bitmap bitmap = null;
+                        if (data != null){
+                            bitmap = data.toImage();
+                            if (bitmap != null){
+                                final Bitmap bitmapTmp = bitmap;
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        imgPhoto.setImageBitmap(bitmapTmp);
+                                    }
+                                });
+                            }
+                        }
                     }
                 };
 
